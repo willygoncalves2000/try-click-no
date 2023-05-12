@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+
+    main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        background-color: #ebeef1;
+        /* z-index: -100; */
+    }
+
+    .box-buttons {
+        gap: 20px;
+        width: 250px;
+        height: 30px;
+        margin-top: 10px;
+    }
+
+    .box-buttons button {
+        width: 100px;
+        height: 30px;
+        font-weight: 500;
+        background: #ebeef1;
+        cursor: pointer;
+        /* border-radius: 50px; */
+        color: #00a037;
+        outline: inherit;
+        padding: 0;
+        border: none;
+        z-index: 1;
+
+        /* box-shadow: 10px 10px 10px -1px rgba(10, 99, 169, 0.16),
+                    -10px -10px 10px -1px rgba(255, 255, 255, 0.70); */
+    }
+
+    .box-buttons .reject {
+        color: #ed0000;
+        border: 2px solid #ed0000;
+        float: right;
+        /* box-shadow: inset 10px 10px 10px -1px rgba(10, 99, 169, 0.16),
+                    inset -10px -10px 10px -1px rgba(255, 255, 255, 0.70); */
+    }
+
+    .box-buttons .btn-yes {
+        transition: color 0.4s linear;
+        position: relative;
+        background: none;
+        border: 2px solid #00a037;
+    }
+
+    .box-buttons .btn-yes:hover {
+        color: #fff;
+    }
+    .box-buttons .btn-yes::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        /* border-radius: 50px; */
+        background: #00a037;
+        z-index: -1;
+        transition: transform 0.5s;
+        transform-origin: 0 0;
+        transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+        transform: scaleX(0);
+    }
+    .box-buttons .btn-yes:hover::before {
+        transform: scaleX(1);
+    }
+
+    main .modal {
+        width: 100%;
+        height: 100%;
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 10;
+
+        align-items: center;
+        justify-content: center;
+
+        box-shadow: 10px 9px 11px -3px rgba(0,0,0,0.7);
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 380px;
+        text-align: center;
+    }
+
+    .modal-content .box-buttons {
+        margin: 20px 0 0 0;
+        width: auto;
+    }
+    .modal-content .box-buttons button {
+        width: 150px;
+    }
+
+    .modal-content .box-buttons .reject {
+        transition: color 0.4s linear;
+        position: relative;
+        background: none;
+    }
+
+    .modal-content .box-buttons .reject:hover {
+        color: #fff;
+    }   
+
+    .modal-content .box-buttons .reject::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        /* border-radius: 50px; */
+        background: #ed0000;
+        z-index: -1;
+        transition: transform 0.5s;
+        transform-origin: 0 0;
+        transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+        transform: scaleX(0);
+    }
+
+    .modal-content .box-buttons .reject:hover::before {
+        transform: scaleX(1);
+    }
+
+
+</style>
+
+<body>
+    <main>
+        <h3>Você vai me dar a camisa do Cruzeiro?</h3>
+        <div class="box-buttons">
+            <button type="button" class="btn-yes" onclick="clickYesBtn()">SIM</button>
+            <button type="button" class="btn-no reject" id="btn-no" onclick="clickNoBtn()" onmousemove="moveButton()">NÃO</button>
+        </div>
+
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <p>Até quando vai insistir nisso?</p>
+                <div class="box-buttons">
+                    <button type="button" class="btn-no reject" onclick="clickContinue()"> Até eu conseguir</button>
+                    <button type="button" class="btn-yes" onclick="clickYesBtn()"> RESPONDER "SIM"</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+<script>
+    setTimeout( function() { showMessage(); }, 7000);
+
+    function moveButton() {
+        let topPosition = Math.floor(Math.random() * (89 - 2) ) + 2;
+        let leftPosition = Math.floor(Math.random() * (89 - 2) ) + 2;
+        let noBtn = document.getElementById("btn-no" );
+        noBtn.style.position = 'absolute'
+        noBtn.style.top = topPosition + '%';
+        noBtn.style.left = leftPosition + '%';
+        
+    }
+
+    function showMessage() {
+        let modal = document.getElementById("modal");
+        let time = Math.floor(Math.random() * (12000 - 7000) ) + 7000;
+        setTimeout( function() { showMessage(); }, time);
+        console.log(time);
+        modal.style.display = 'flex'
+
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none"
+            showMessage();
+        }
+    }
+    }
+
+    function clickNoBtn() {
+        alert('CONGRATULATIONS!!!');
+    }
+    function clickYesBtn() {
+        let modal = document.getElementById("modal");
+        modal.style.display = 'none'
+        window.open(
+            'https://loja.cruzeiro.com.br/camisa-cruzeiro-i-2324-sn-torcedor-adidas-masculina-azul-FB8-4686-008',
+            '_blank' // <- This is what makes it open in a new window.
+        );
+        showMessage();
+    }
+    
+    function clickContinue() {
+        let modal = document.getElementById("modal");
+        modal.style.display = 'none'
+    }
+
+
+</script>
